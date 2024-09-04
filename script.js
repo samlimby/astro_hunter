@@ -1,8 +1,12 @@
 const gameCanvas = document.getElementById("game-canvas");
-gameCanvas.width = 1200; // Set canvas width
-gameCanvas.height = 560; // Set canvas height
+gameCanvas.width = 810; 
+gameCanvas.height = 560; 
 
 const c = gameCanvas.getContext("2d");
+
+let keyboardActions = {
+
+};
 
 window.addEventListener("click", function(){
     playerShape();
@@ -11,8 +15,8 @@ window.addEventListener("click", function(){
 function playerShape() {
     let x = 200;
     let y = 400;
-    let dx = 1;
-    let dy = 1;
+    let dx = 10;
+    let dy = 10;
     function draw() {
         c.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
         c.fillStyle = "black";

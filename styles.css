@@ -16,6 +16,13 @@ body {
     margin: 0;
 }
 
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 56px;
+}
+
 #game-canvas {
     border: 2px solid #CCC;
     background: #EEE;
