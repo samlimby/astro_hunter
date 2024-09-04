@@ -4,7 +4,7 @@ gameCanvas.height = 560; // Set canvas height
 
 const c = gameCanvas.getContext("2d");
 
-gameCanvas.addEventListener("click", function(){
+window.addEventListener("click", function(){
     playerShape();
 });
 
@@ -13,12 +13,21 @@ function playerShape() {
     let y = 400;
     let dx = 1;
     let dy = 1;
-    c.fillStyle = "black";
-    c.fillRect(x, y, 56, 56);
+    function draw() {
+        c.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        c.fillStyle = "black";
+        c.fillRect(x, y, 56, 56);
+    };
+
     window.addEventListener("keyup", function(){
-        x += dx
+        console.log("event pressed");
+        x += dx;
+        draw();
     })
     window.addEventListener("keydown", function(){
-        x += -dx
+        x += -dy;
+        draw();
     })
-}
+
+    draw();
+};
