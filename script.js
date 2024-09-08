@@ -4,33 +4,35 @@ gameCanvas.height = 560;
 
 const c = gameCanvas.getContext("2d");
 
-let levelSpeed = 5;
+let levelSpeed = 4;
 let astroidCount = 0;
 
-const playerXMovement = 2;
-const playerYMovement = 2;
+const playerXMovement = 25;
+const playerYMovement = 25;
 
-// functions to draw both shapes initially
-// functions to update and apply movement to both shapes
+let astroidArray = [];
+
+function createAstroid() {
+    return {
+        x: 800,
+        y: Math.floor(Math.random() * gameCanvas.height),
+        dx: levelSpeed,
+        dy: levelSpeed,
+        radius: 48
+    }
+}
+
+for (let i = 0; i < 5; i++) {
+    astroidArray.push(createAstroid());
+}
 
 let playerShape = {
     x: 200, 
     y: 400,
-    dx: playerXMovement,
-    dy: playerYMovement,
+    dx: 0,
+    dy: 0,
     radius: 56
 };
-
-let astroidShape = {
-    x: Math.floor(Math.random() * gameCanvas.width),
-    y: Math.floor(Math.random() * gameCanvas.height),
-    dx: levelSpeed,
-    dy: levelSpeed,
-    radius: 48
-};
-
-const astroidArray = [];
-
 
 window.addEventListener("click", function(){
 
@@ -41,7 +43,9 @@ window.addEventListener("click", function(){
     
     function drawAstroid() {
         c.fillStyle = "red";
-        c.fillRect(astroidShape.x, astroidShape.y, astroidShape.radius, astroidShape.radius);
+        astroidArray.forEach(function(astroid){
+            c.fillRect(astroid.x, astroid.y, astroid.radius, astroid.radius);
+        });
     };
     
     function playerUpdate() {
@@ -50,29 +54,37 @@ window.addEventListener("click", function(){
     }
     
     function astroidUpdate() {
-        astroidShape.x += astroidShape.dx;
-        astroidShape.y += astroidShape.dy;
-    }
+        astroidArray.forEach(function(astroid){
+            astroid.x -= astroid.dx;
+
+            if (astroid.x + astroid.radius < 0) { 
+                astroid.x = gameCanvas.width;  
+                astroid.y = Math.floor(Math.random() * gameCanvas.height);  
+            };
+        });
+    };
     
     function animate() {
         requestAnimationFrame(animate) 
         c.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-        drawPlayer();
-        drawAstroid();
+
         playerUpdate();
+        drawPlayer();
+
         astroidUpdate();
+        drawAstroid();
     };
 
     window.addEventListener("keydown", function(event){
         if (event.key === "w" || event.key === "W" || event.key === "ArrowUp") {
-            playerShape.y = -playerYMovement
+            playerShape.y -= playerYMovement; 
             console.log(playerShape.y)
         } else if (event.key === "s" || event.key === "S" || event.key === "ArrowDown") {
-            playerShape.y = playerYMovement
+            playerShape.y += playerYMovement;
         } else if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
-            playerShape.x = -playerXMovement
+            playerShape.x -= playerXMovement
         } else if (event.key === "d" || event.key === "D" || event.key === "ArrowRight") {
-            playerShape.x = playerXMovement
+            playerShape.x += playerXMovement
         }
     });
 
@@ -80,5 +92,4 @@ window.addEventListener("click", function(){
 
 });
 
-console.log(playerShape.x, playerShape.y)
-console.log(astroidShape.x, astroidShape.y)
+console.log(astroidArray)
