@@ -6,6 +6,7 @@ const c = gameCanvas.getContext("2d");
 
 let levelSpeed = 4;
 let astroidCount = 0;
+let gameScore = 0;
 
 const playerXMovement = 25;
 const playerYMovement = 25;
@@ -36,13 +37,19 @@ let playerShape = {
 
 window.addEventListener("click", function(){
 
+    function gameCounter() {
+        c.font = "20px Departure Mono";
+        c.fillStyle = "dark grey";
+        c.fillText(`Score: ${gameScore}`, 660, 40);
+    };
+
     function drawPlayer() {
         c.fillStyle = "black";
         c.fillRect(playerShape.x, playerShape.y, playerShape.radius, playerShape.radius);
     };
     
     function drawAstroid() {
-        c.fillStyle = "red";
+        c.fillStyle = "grey";
         astroidArray.forEach(function(astroid){
             c.fillRect(astroid.x, astroid.y, astroid.radius, astroid.radius);
         });
@@ -68,6 +75,8 @@ window.addEventListener("click", function(){
         requestAnimationFrame(animate) 
         c.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+        gameCounter();
+
         playerUpdate();
         drawPlayer();
 
@@ -82,14 +91,14 @@ window.addEventListener("click", function(){
         } else if (event.key === "s" || event.key === "S" || event.key === "ArrowDown") {
             playerShape.y += playerYMovement;
         } else if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
-            playerShape.x -= playerXMovement
+            playerShape.x -= playerXMovement;
         } else if (event.key === "d" || event.key === "D" || event.key === "ArrowRight") {
-            playerShape.x += playerXMovement
+            playerShape.x += playerXMovement;
         }
     });
 
     animate();
 
 });
-
+ 
 console.log(astroidArray)
