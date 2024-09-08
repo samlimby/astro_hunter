@@ -32,15 +32,13 @@ let playerShape = {
     radius: 56
 };
 
-// Define game states
 const GAME_STATES = {
     DEFAULT: 'default',
     GAME: 'game'
 };
 
-let currentGameState = GAME_STATES.DEFAULT; // Start with the default state
+let currentGameState = GAME_STATES.DEFAULT;
 
-// Game Loop: Manage which level to draw
 function gameLoop() {
     c.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
@@ -57,7 +55,6 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// Default Level: Display Menu
 function drawDefault() {
     c.font = "30px Arial";
     c.fillStyle = "black";
@@ -65,7 +62,6 @@ function drawDefault() {
     c.fillText("Click to Start Game", gameCanvas.width / 2 - 150, gameCanvas.height / 2);
 }
 
-// Game Level: Initialize and Draw
 function initializeGame() {
     activeGame = true;
     gameScore = 0; 
@@ -88,7 +84,6 @@ function gameCounter() {
     }
 }
 
-// Draw Player and Asteroids
 function drawPlayer() {
     c.fillStyle = "black";
     c.fillRect(playerShape.x, playerShape.y, playerShape.radius, playerShape.radius);
@@ -125,7 +120,6 @@ function shapeCollision() {
     });
 }
 
-// Collision Detection
 function isRectCollision(rect1, rect2) {
     return (
         rect1.x < rect2.x + rect2.radius &&
@@ -135,7 +129,6 @@ function isRectCollision(rect1, rect2) {
     );
 }
 
-// Game Update: Runs for the Game State
 function gameUpdate() {
     gameCounter();
     playerUpdate();
@@ -143,19 +136,16 @@ function gameUpdate() {
     shapeCollision();
 }
 
-// Draw Game: Renders Player and Asteroids
 function drawGame() {
     drawPlayer();
     drawAstroid();
 }
 
-// Reset Game: Resets all game variables
 function resetGame() {
     activeGame = false;
-    currentGameState = GAME_STATES.DEFAULT; // Go back to the default state
+    currentGameState = GAME_STATES.DEFAULT; 
 }
 
-// Handle User Input for Game
 window.addEventListener("keydown", function(event) {
     if (currentGameState === GAME_STATES.GAME) {
         if (event.key === "w" || event.key === "W" || event.key === "ArrowUp") {
@@ -170,13 +160,11 @@ window.addEventListener("keydown", function(event) {
     }
 });
 
-// Handle Click to Start Game
 window.addEventListener("click", function() {
     if (currentGameState === GAME_STATES.DEFAULT) {
-        currentGameState = GAME_STATES.GAME; // Switch to game state
-        initializeGame(); // Initialize game variables and settings
+        currentGameState = GAME_STATES.GAME; 
+        initializeGame(); 
     }
 });
 
-// Start the game loop
 gameLoop();
