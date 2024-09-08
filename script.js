@@ -41,6 +41,7 @@ window.addEventListener("click", function(){
         c.font = "20px Departure Mono";
         c.fillStyle = "dark grey";
         c.fillText(`Score: ${gameScore}`, 660, 40);
+        gameScore++;
     };
 
     function drawPlayer() {
