@@ -4,7 +4,7 @@ gameCanvas.height = 560;
 
 const c = gameCanvas.getContext("2d");
 
-let levelSpeed = 4;
+let levelSpeed = 4 * 1.5;
 let astroidCount = 0;
 let gameScore = 0;
 let activeGame = false;
@@ -39,6 +39,12 @@ const GAME_STATES = {
 
 let currentGameState = GAME_STATES.DEFAULT;
 
+// Initial button properties
+const buttonX = 810 / 2 - 80; 
+const buttonY = 560 / 2 - 24; 
+const buttonWidth = 160;
+const buttonHeight = 48;
+
 function gameLoop() {
     c.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
@@ -56,10 +62,16 @@ function gameLoop() {
 }
 
 function drawDefault() {
-    c.font = "30px Arial";
-    c.fillStyle = "black";
-    c.fillText("Main Menu", gameCanvas.width / 2 - 100, gameCanvas.height / 2 - 60);
-    c.fillText("Click to Start Game", gameCanvas.width / 2 - 150, gameCanvas.height / 2);
+    // Draw button rectangle
+    c.fillStyle = '#444444';
+    c.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+    // Draw button text
+    c.fillStyle = 'white';
+    c.font = '20px Departure Mono';
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText('Start Game', buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
 }
 
 function initializeGame() {
@@ -78,7 +90,7 @@ function initializeGame() {
 function gameCounter() {
     c.font = "20px Departure Mono";
     c.fillStyle = "dark grey";
-    c.fillText(`Score: ${gameScore}`, 660, 40);
+    c.fillText(`Score: ${gameScore}`, 720, 40);
     if (activeGame) {
         gameScore++;
     }
@@ -158,10 +170,19 @@ window.addEventListener("keydown", function(event) {
             playerShape.x += playerXMovement;
         }
     }
+
+    console.log(levelSpeed)
 });
 
-window.addEventListener("click", function() {
-    if (currentGameState === GAME_STATES.DEFAULT) {
+window.addEventListener("click", function(event) {
+    const rect = gameCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Check if the click is within the button area
+    if (currentGameState === GAME_STATES.DEFAULT &&
+        x >= buttonX && x <= buttonX + buttonWidth &&
+        y >= buttonY && y <= buttonY + buttonHeight) {
         currentGameState = GAME_STATES.GAME; 
         initializeGame(); 
     }
