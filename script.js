@@ -1,4 +1,13 @@
 const gameCanvas = document.getElementById("game-canvas");
+const scoreZone = document.getElementById("score_zone")
+const scoreSection = document.getElementById("score_text-section");
+let scoreText = document.getElementById("score-text");
+
+const date = new Date();
+const hours = date.getHours();
+const minutes = date.getMinutes();
+const seconds = date.getSeconds();
+
 gameCanvas.width = 810; 
 gameCanvas.height = 560; 
 
@@ -8,6 +17,28 @@ let levelSpeed = 4 * 1.5;
 let astroidCount = 0;
 let gameScore = 0;
 let activeGame = false;
+
+let priorScore = [];
+
+for (let i = 0; i < priorScore.length; i++) {
+    retrievePriorScore();
+    renderScore();
+    closePriorScore();
+};
+
+function retrievePriorScore() {
+    let string = JSON.stringify(priorScore);
+    localStorage.setItem("priorScore", string);
+}
+
+function closePriorScore() {
+    localStorage.getItem("students");
+    priorScore = JSON.parse(priorScore);
+}
+
+
+
+let scoreLog = [];
 
 const playerXMovement = 25;
 const playerYMovement = 25;
@@ -96,6 +127,24 @@ function gameCounter() {
     }
 }
 
+function storeScore() {
+    scoreLog.push(gameScore);
+    scoreLog = JSON.stringify(scoreLog);
+    console.log(scoreLog);
+    localStorage.setItem("scoreLog", "gameScore");
+    console.log(localStorage.getItem("scoreLog"));
+    scoreLog = JSON.parse(scoreLog);
+    console.log(scoreLog);
+    renderScore();
+}
+
+function renderScore() {
+    let newScore = document.createElement("p");
+    newScore.classList.add("score_text");
+    newScore.innerHTML = `${gameScore} - ${date.toDateString()} / ${hours}:${minutes}:${seconds}`
+    scoreSection.appendChild(newScore);
+}
+
 function drawPlayer() {
     c.fillStyle = "black";
     c.fillRect(playerShape.x, playerShape.y, playerShape.radius, playerShape.radius);
@@ -127,6 +176,7 @@ function astroidUpdate() {
 function shapeCollision() {
     astroidArray.forEach(function(astroid) {
         if (isRectCollision(playerShape, astroid)) {
+            storeScore();
             resetGame();
         }
     });
@@ -170,8 +220,6 @@ window.addEventListener("keydown", function(event) {
             playerShape.x += playerXMovement;
         }
     }
-
-    console.log(levelSpeed)
 });
 
 window.addEventListener("click", function(event) {
