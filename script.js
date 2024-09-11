@@ -3,6 +3,7 @@ const scoreZone = document.getElementById("score_zone")
 const scoreSection = document.getElementById("score_text-section");
 let scoreText = document.getElementById("score-text");
 
+
 const date = new Date();
 const hours = date.getHours();
 const minutes = date.getMinutes();
@@ -19,26 +20,12 @@ let gameScore = 0;
 let activeGame = false;
 
 let priorScore = [];
-
-for (let i = 0; i < priorScore.length; i++) {
-    retrievePriorScore();
-    renderScore();
-    closePriorScore();
-};
-
-function retrievePriorScore() {
-    let string = JSON.stringify(priorScore);
-    localStorage.setItem("priorScore", string);
-}
-
-function closePriorScore() {
-    localStorage.getItem("students");
-    priorScore = JSON.parse(priorScore);
-}
-
-
-
 let scoreLog = [];
+
+scoreSection.innerHTML = `
+    ${scoreText.innerHTML = localStorage.getItem("priorScore")}
+`;
+
 
 const playerXMovement = 25;
 const playerYMovement = 25;
@@ -129,12 +116,6 @@ function gameCounter() {
 
 function storeScore() {
     scoreLog.push(gameScore);
-    scoreLog = JSON.stringify(scoreLog);
-    console.log(scoreLog);
-    localStorage.setItem("scoreLog", "gameScore");
-    console.log(localStorage.getItem("scoreLog"));
-    scoreLog = JSON.parse(scoreLog);
-    console.log(scoreLog);
     renderScore();
 }
 
@@ -143,6 +124,10 @@ function renderScore() {
     newScore.classList.add("score_text");
     newScore.innerHTML = `${gameScore} - ${date.toDateString()} / ${hours}:${minutes}:${seconds}`
     scoreSection.appendChild(newScore);
+    priorScore.push(newScore);
+    localStorage.setItem("priorScore", newScore.innerHTML);
+    newScore.innerHTML = localStorage.getItem("priorScore");
+    console.log(localStorage.getItem("priorScore"));
 }
 
 function drawPlayer() {
