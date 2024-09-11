@@ -19,13 +19,34 @@ let astroidCount = 0;
 let gameScore = 0;
 let activeGame = false;
 
-let priorScore = [];
-let scoreLog = [];
+let priorScore = JSON.parse(localStorage.getItem("priorScore")) || [];
 
-scoreSection.innerHTML = `
-    ${scoreText.innerHTML = localStorage.getItem("priorScore")}
-`;
+function renderScores() {
+    const storedPriorScore = JSON.parse(localStorage.getItem("priorScore"));
+    const scoreSection = document.getElementById("score_text-section");
 
+    scoreSection.innerHTML = "";
+
+    if (storedPriorScore && Array.isArray(storedPriorScore)) {
+        for (let i = 0; i < storedPriorScore.length; i++) {
+            const newScore = document.createElement("p");
+            newScore.classList.add("score_text");
+            newScore.innerHTML = `${storedPriorScore[i]} - ${date.toDateString()} / ${hours}:${minutes}:${seconds}`;
+            scoreSection.appendChild(newScore);
+        }; 
+    } else {
+        console.log("localStorage failure!!!")
+    };
+};
+
+renderScores();
+
+function storeScore() {
+    priorScore.push(gameScore);
+    localStorage.setItem("priorScore", JSON.stringify(priorScore));
+    console.log("score loading");
+    renderScores();
+}
 
 const playerXMovement = 25;
 const playerYMovement = 25;
@@ -57,7 +78,6 @@ const GAME_STATES = {
 
 let currentGameState = GAME_STATES.DEFAULT;
 
-// Initial button properties
 const buttonX = 810 / 2 - 80; 
 const buttonY = 560 / 2 - 24; 
 const buttonWidth = 160;
@@ -112,22 +132,6 @@ function gameCounter() {
     if (activeGame) {
         gameScore++;
     }
-}
-
-function storeScore() {
-    scoreLog.push(gameScore);
-    renderScore();
-}
-
-function renderScore() {
-    let newScore = document.createElement("p");
-    newScore.classList.add("score_text");
-    newScore.innerHTML = `${gameScore} - ${date.toDateString()} / ${hours}:${minutes}:${seconds}`
-    scoreSection.appendChild(newScore);
-    priorScore.push(newScore);
-    localStorage.setItem("priorScore", newScore.innerHTML);
-    newScore.innerHTML = localStorage.getItem("priorScore");
-    console.log(localStorage.getItem("priorScore"));
 }
 
 function drawPlayer() {
@@ -212,7 +216,6 @@ window.addEventListener("click", function(event) {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    // Check if the click is within the button area
     if (currentGameState === GAME_STATES.DEFAULT &&
         x >= buttonX && x <= buttonX + buttonWidth &&
         y >= buttonY && y <= buttonY + buttonHeight) {
